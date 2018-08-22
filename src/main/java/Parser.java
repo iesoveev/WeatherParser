@@ -7,24 +7,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
-    public static void main(String[] args) throws Exception {
-        Document page = getPage();
-        Element tableWth = page.select("table[class=wt]").first();
-        Elements names = tableWth.select("tr[class=wth]");
-        Elements values = tableWth.select("tr[valign=top]");
-        int index = 0;
-        for (Element name : names) {
-            String dateString = name.select("th[id=dt]").text();
-            String date = getDateFromString(dateString);
-            System.out.println(date + "                Явления                     Температура   Давл. Влажность         Ветер" + "\n");
-            int iterationCount = printPartValues(values, index);
-            index += iterationCount;
-        }
-    }
 
-    private static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
 
-    private static String getDateFromString(String stringDate) throws Exception {
+    protected static Pattern pattern = Pattern.compile("\\d{2}\\.\\d{2}");
+
+    protected static String getDateFromString(String stringDate) throws Exception {
         Matcher matcher = pattern.matcher(stringDate);
         if (matcher.find()) {
            return matcher.group();
@@ -32,13 +19,13 @@ public class Parser {
         throw new Exception("Can`t extract date from string!");
     }
 
-    private static Document getPage() throws IOException {
+    protected static Document getPage() throws IOException {
         String url = "http://pogoda.spb.ru/";
         Document page = Jsoup.parse(new URL(url), 3000);
         return page;
     }
 
-    private static int printPartValues(Elements values, int index) {
+    protected static int printPartValues(Elements values, int index) {
         int iterationCount = 4;
         if (index == 0) {
             Element valueLn = values.get(0);
